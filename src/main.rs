@@ -12,7 +12,11 @@ fn main() {
     analize_code(&mut code, &mut pointer, &mut array_byte);
 }
 
-fn analize_code(code: &mut String, pointer: &mut usize, array_byte: &mut [u8; 30000]) {
+fn analize_code(
+    code: &mut String, 
+    pointer: &mut usize, 
+    array_byte: &mut [u8; 30000]
+) {
     let mut loop_stack: usize = 0;
     let mut loop_code: String = String::new();
     let mut iter_byte: usize = 0;
@@ -39,6 +43,15 @@ fn analize_code(code: &mut String, pointer: &mut usize, array_byte: &mut [u8; 30
                 '<' => *pointer -= 1,
                 '>' => *pointer += 1,
                 '.' => print!("{}", array_byte[*pointer] as char),
+                ',' => {
+                    let mut inp: String = String::new();
+                    io::stdin()
+                        .read_line(&mut inp)
+                        .expect("Error: Failed to read char.");
+                    
+                    array_byte[*pointer] = 
+                        inp.chars().collect::<Vec<char>>()[0] as u8;
+                },
                 '[' => {
                     loop_stack += 1;
                     iter_byte = *pointer;
